@@ -16,6 +16,10 @@ var socket = io();
 	margin:auto;
 }
 
+#controlDiv{
+		float:left;
+}
+
 .shine{
 	background-color:#0095ff;
 	border-left:5px solid #55d5ff;
@@ -32,6 +36,9 @@ var socket = io();
 #mainDiv{
 	width:500px;
 	height:500px;
+	float:left;
+	margin-right:50px;
+	margin-bottom:50px;
 }
 
 #mainBackground{
@@ -90,12 +97,13 @@ var socket = io();
 
 #controlDiv{
 	width:500px;
-	margin-top:50px;
-	min-height:75px;
+	
+	min-height:400px;
 }
 
 button{
 	background-color:#0095ff;	
+	width:100px;
 }
 
 </style>
@@ -107,6 +115,7 @@ button{
 		<button id="right">></button>
 		<button id="down">v</button>
 	</div>
+	
 	<div class="shine" id="controlDiv">
 		<div>makeGrid(size , smoothness)</div>
 		<button onClick="makeGridViaButton()">makeGrid</button><span>(</span>
@@ -122,14 +131,14 @@ button{
 			<span id="popSpan">0</span>
 		</div>
 		<div>
-			<button onClick = "setSelection('tinyHouse')" >Residential</button>
-			<button onClick = "setSelection('tinyStore')" >Commercial</button>
-			<button onClick = "setSelection('tinyFactory')" >Industrial</button>
-			<button onClick = "setSelection('tinyPark')" >Parks</button>
-			<button onClick = "setSelection('wall')" >Walls</button>
-			<button onClick = "setSelection('upgrade')" >Upgrade</button>
-			<button onClick = "setSelection('empty')" >Demolish</button>
-			<br/>
+			<button onClick = "setSelection('tinyHouse')" >Residential</button> $50, Basic Housing<br/>
+			<button onClick = "setSelection('tinyStore')" >Commercial</button>$250, Small Shops<br/>
+			<button onClick = "setSelection('tinyFactory')" >Industrial</button>$100, Simple Factories<br/>
+			<button onClick = "setSelection('tinyPark')" >Parks</button>$200, Quaint Parks<br/>
+			<button onClick = "setSelection('wall')" >Walls</button>$50, Reliable Defense<br/>
+			<button onClick = "setSelection('upgrade')" >Upgrade</button>Epensive, But, Worth It<br/>
+			<button onClick = "setSelection('empty')" >Demolish</button>Clean Your City<br/>
+			
 
 			<span id="currSelection"></span>
 		</div>
@@ -263,7 +272,7 @@ button{
 			}
 		}
 		
-		grid[Math.floor((Math.random() * size) + 1)][Math.floor((Math.random() * size) + 1)]["content"] = "dan";
+		grid[Math.floor((Math.random() * size))][Math.floor((Math.random() * size))]["content"] = "dan";
 		
 		return grid;
 	}
@@ -297,7 +306,19 @@ button{
 	//==================================================================================
 	function gridClick(x,y){
 		if(grid != undefined){
-			if(grid[x][y]["content"] != "danBase" && grid[x][y]["content"] != "dormantDanBase" && grid[x][y]["content"] != "reallyDormantDanBase" ){
+			if(grid[x][y]["content"] != "danBase" && grid[x][y]["content"] != "dormantDanBase" && grid[x][y]["content"] != "reallyDormantDanBase"){
+				if(currentSelection == "wall" && money >= 50){
+						grid[x][y]["content"] = currentSelection;
+						money-=50;
+						grid[x][y]["content"] = "walls/wall";
+						wallCheck();
+						
+					}else if(currentSelection == "wall" && money < 50){
+						
+					}
+				}
+			
+			if(grid[x][y]["content"] != "danBase" && grid[x][y]["content"] != "dormantDanBase" && grid[x][y]["content"] != "reallyDormantDanBase" && grid[x][y]["height"]<240 && grid[x][y]["height"] >140){
 				
 				
 				if(currentSelection == "upgrade"){
@@ -409,15 +430,7 @@ button{
 						
 					}
 					 
-					if(currentSelection == "wall" && money >= 50){
-						grid[x][y]["content"] = currentSelection;
-						money-=50;
-						grid[x][y]["content"] = "walls/wall";
-						
-						
-					}else if(currentSelection == "wall" && money < 50){
-						
-					}
+					
 					 console.log(money);
 					if(currentSelection == "tinyHouse" && money>=50){
 						grid[x][y]["content"] = currentSelection;
@@ -532,7 +545,7 @@ button{
 		
 		if(grid[x+1] != undefined && grid[x-1] != undefined ){
 			if(grid[x][y+1] != undefined && grid[x][y-1] != undefined ){
-				temp = Math.floor((Math.random() * 100) + 1);
+				temp = Math.floor((Math.random() * 30) + 1);
 				if(temp==1 && grid[x][y+1]["content"].substring(0,4) == "wall"){
 					grid[x][y+1]["content"] = "empty";
 					document.getElementById("x"+(x)+"y"+(y+1)).src = grid[x][y+1]["content"]+".png";
@@ -552,22 +565,22 @@ button{
 				
 				temp = Math.floor((Math.random() * 4) + 1);
 				
-				if(temp==1 && grid[x][y+1]["content"].substring(0,4) != "wall" && (grid[x][y+1]["content"] != "danBase" && grid[x][y+1]["content"] != "reallyDormantDanBase" && grid[x][y+1]["content"] != "dormantDanBase")){
+				if(temp==1 && grid[x][y+1]["content"].substring(0,4) != "wall" && (grid[x][y+1]["content"] != "danBase" && grid[x][y+1]["content"] != "reallyDormantDanBase" && grid[x][y+1]["content"] != "dormantDanBase" && grid[x][y+1]["content"] != "dan")){
 					grid[x][y+1]["content"] = "empty";
 					document.getElementById("x"+(x)+"y"+(y+1)).src = grid[x][y+1]["content"]+".png";
 				}
 				
-				if(temp==2 && grid[x][y-1]["content"].substring(0,4) != "wall" && (grid[x][y-1]["content"] != "danBase" && grid[x][y-1]["content"] != "reallyDormantDanBase" && grid[x][y-1]["content"] != "dormantDanBase")){
+				if(temp==2 && grid[x][y-1]["content"].substring(0,4) != "wall" && (grid[x][y-1]["content"] != "danBase" && grid[x][y-1]["content"] != "reallyDormantDanBase" && grid[x][y-1]["content"] != "dormantDanBase" && grid[x][y-1]["content"] != "dan")){
 					grid[x][y-1]["content"] = "empty";
 					document.getElementById("x"+(x)+"y"+(y-1)).src = grid[x][y-1]["content"]+".png";
 				}
 				
-				if(temp==3 && grid[x+1][y]["content"].substring(0,4) != "wall" && (grid[x+1][y]["content"] != "danBase" && grid[x+1][y]["content"] != "reallyDormantDanBase" && grid[x+1][y]["content"] != "dormantDanBase")){
+				if(temp==3 && grid[x+1][y]["content"].substring(0,4) != "wall" && (grid[x+1][y]["content"] != "danBase" && grid[x+1][y]["content"] != "reallyDormantDanBase" && grid[x+1][y]["content"] != "dormantDanBase" && grid[x+1][y]["content"] != "dan")){
 					grid[x+1][y]["content"] = "empty";
 					document.getElementById("x"+(x+1)+"y"+(y)).src = grid[x+1][y]["content"]+".png";
 				}
 				
-				if(temp==4 && grid[x-1][y]["content"].substring(0,4) != "wall" && (grid[x-1][y]["content"] != "danBase" && grid[x-1][y]["content"] != "reallyDormantDanBase" && grid[x-1][y]["content"] != "dormantDanBase")){
+				if(temp==4 && grid[x-1][y]["content"].substring(0,4) != "wall" && (grid[x-1][y]["content"] != "danBase" && grid[x-1][y]["content"] != "reallyDormantDanBase" && grid[x-1][y]["content"] != "dormantDanBase" && grid[x-1][y]["content"] != "dan")){
 					grid[x-1][y]["content"] = "empty";
 					document.getElementById("x"+(x-1)+"y"+(y)).src = grid[x-1][y]["content"]+".png";
 				}
@@ -622,6 +635,38 @@ button{
 				
 				
 				if(grid[j][i]["content"] == "danBase" || grid[j][i]["content"] == "dormantDanBase" ){
+					
+					
+						if(grid[j+1] != undefined && grid[j-1] != undefined ){
+							if(grid[j][i+1] != undefined && grid[j][i-1] != undefined ){
+								if(grid[j][i+1]["content"] != undefined && grid[j][i-1]["content"] != undefined ){
+									if(grid[j+1][i]["content"] != undefined && grid[j-1][i]["content"] != undefined ){
+										temp = Math.floor((Math.random() * 4) + 1);
+										
+										if(temp==1 && grid[j][i+1]["content"].substring(0,4) != "wall" && (grid[j][i+1]["content"] != "danBase" && grid[j][i+1]["content"] != "reallyDormantDanBase" && grid[j][i+1]["content"] != "dormantDanBase" && grid[j][i+1]["content"] != "dan")){
+											grid[j][i+1]["content"] = "empty";
+											document.getElementById("x"+(j)+"y"+(i+1)).src = grid[j][i+1]["content"]+".png";
+										}
+											
+										if(temp==2 && grid[j][i-1]["content"].substring(0,4) != "wall" && (grid[j][i-1]["content"] != "danBase" && grid[j][i-1]["content"] != "reallyDormantDanBase" && grid[j][i-1]["content"] != "dormantDanBase" && grid[j][i-1]["content"] != "dan")){
+											grid[j][i-1]["content"] = "empty";
+											document.getElementById("x"+(j)+"y"+(i-1)).src = grid[j][i-1]["content"]+".png";
+										}
+												
+										if(temp==3 && grid[j+1][i]["content"].substring(0,4) != "wall" && (grid[j+1][i]["content"] != "danBase" && grid[j+1][i]["content"] != "reallyDormantDanBase" && grid[j+1][i]["content"] != "dormantDanBase" && grid[j+1][i]["content"] != "dan")){
+											grid[j+1][i]["content"] = "empty";
+											document.getElementById("x"+(j+1)+"y"+(i)).src = grid[j+1][i]["content"]+".png";
+										}
+												
+										if(temp==4 && grid[j-1][i]["content"].substring(0,4) != "wall" && (grid[j-1][i]["content"] != "danBase" && grid[j-1][i]["content"] != "reallyDormantDanBase" && grid[j-1][i]["content"] != "dormantDanBase" && grid[j-1][i]["content"] != "dan")){
+											grid[j-1][i]["content"] = "empty";
+											document.getElementById("x"+(j-1)+"y"+(i)).src = grid[j-1][i]["content"]+".png";
+										}
+									}
+								}
+							}
+						}
+					
 					danBasePlaced = true;
 					grid[j][i]["danValue"] += 1;
 					if(grid[j-1] != undefined){
@@ -655,7 +700,7 @@ button{
 						
 						if(grid[j+1] != undefined && grid[j-1] != undefined ){
 							if(grid[j][i+1] != undefined && grid[j][i-1] != undefined ){
-								temp = Math.floor((Math.random() * 20) + 1);
+								temp = Math.floor((Math.random() * 10) + 1);
 								if(temp==1 && grid[j][i+1]["content"].substring(0,4) == "wall"){
 									grid[j][i+1]["content"] = "empty";
 								}
@@ -668,6 +713,9 @@ button{
 								if(temp==4 && grid[j+1][i]["content"].substring(0,4) == "wall"){
 									grid[j+1][i]["content"] = "empty";
 								}
+								
+				
+								
 							}
 						}
 						
@@ -846,40 +894,39 @@ button{
 						//j undefined
 						if(grid[j+1] != undefined){
 							W = "W";
-							if(grid[j][i+1] == undefined || grid[j][i-1] == undefined){
-								if(grid[j][i+1] == undefined){
+							if(grid[j][i+1] != undefined && grid[j][i-1] != undefined){
+								if(grid[j][i+1] != undefined){
 									N = "N";
-									if(grid[j][i-1] == grid[j][i-1]["content"].substring(0,4) == "wall"){
-										S = "S";
-									}
-								}else{
-									S = "S";
-									if(grid[j][i] == grid[j][i+1]["content"].substring(0,4) == "wall"){
+									if(grid[j][i+1]["content"].substring(0,4) == "wall"){
 										N = "N";
 									}
-								}
-								if(grid[j+1][i] == grid[j+1][i]["content"].substring(0,4) == "wall"){
-									E = "E";
-								}
-								if(grid[j-1][i] == grid[j-1][i]["content"].substring(0,4) == "wall"){
-									W = "W";
-								}
-							}else{
-								if(grid[j+1][i] == undefined){
-									E = "E";
-								}else{
-									W = "W";
-								}
-								if(grid[j][i+1] == undefined){
-									N = "N";
 								}else{
 									S = "S";
+									if(grid[j][i-1]["content"].substring(0,4) == "wall"){
+										S = "S";
+									}
 								}
+							}else{
+								if(grid[j][i+1] != undefined){
+									N = "N";
+									if(grid[j][i+1]["content"].substring(0,4) == "wall"){
+										N = "N";
+									}
+								}else{
+									S = "S";
+									if(grid[j][i-1]["content"].substring(0,4) == "wall"){
+										S = "S";
+									}
+								}
+								
 							}
 						}else{
 							
 						}
 					}
+					
+					
+					
 					console.log("walls/wall"+N+E+S+W);
 					grid[j][i]["content"] = "walls/wall"+N+E+S+W;
 					document.getElementById("x"+j+"y"+i).src = grid[j][i]["content"]+".png";
