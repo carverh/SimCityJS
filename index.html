@@ -88,8 +88,8 @@ var socket = io();
 }
 
 #gridDiv{
-	height:400px;
-	width:400px;
+	height:500px;
+	width:500px;
 	float:left;
 	border:5px solid black;
 	margin:auto;
@@ -108,13 +108,10 @@ button{
 
 </style>
 <body id="mainBody">
-	<div id="mainDiv" class="shine">
-		<div><button id="up">^</button></div>
-		<button id="left"><</button>
-		<div class="shine" id="gridDiv"></div>
-		<button id="right">></button>
-		<button id="down">v</button>
+	<div id="mainDiv">
+		<div id="gridDiv"></div>
 	</div>
+	
 	
 	<div class="shine" id="controlDiv">
 		<div>makeGrid(size , smoothness)</div>
@@ -127,8 +124,8 @@ button{
 		<div>
 			<span>$$$:</span>
 			<span id="moneySpan">1000</span><br/>
-			<span>Population:</span>
-			<span id="popSpan">0</span>
+			<!--<span>Population:</span>
+			<span id="popSpan">0</span>-->
 		</div>
 		<div>
 			<button onClick = "setSelection('tinyHouse')" >Residential</button> $50, Basic Housing<br/>
@@ -173,8 +170,8 @@ button{
 				var el = document.createElement("img");
 				el.id = "x"+j+"y"+i;
 				el.style = "-moz-user-select: none;"
-				el.style.height = (400/size)+"px";
-				el.style.width = (400/size)+"px";
+				el.style.height = (500/size)+"px";
+				el.style.width = (500/size)+"px";
 				el.style.backgroundColor = "#55ff55";
 				el.draggable = false;
 				el.src = "";
@@ -470,9 +467,7 @@ button{
 		document.getElementById("currSelection").innerHTML = currentSelection;
 	}
 	
-	var size = 20;
-	var grid = makeGrid(20,30);
-	dispGrid(grid);
+	
 	
 	function makeGridViaButton(){
 		grid = makeGrid(document.getElementById("gridSizeTextbox").value,document.getElementById("gridSmoothnessTextbox").value);
@@ -564,27 +559,30 @@ button{
 				}
 				
 				temp = Math.floor((Math.random() * 4) + 1);
-				
-				if(temp==1 && grid[x][y+1]["content"].substring(0,4) != "wall" && (grid[x][y+1]["content"] != "danBase" && grid[x][y+1]["content"] != "reallyDormantDanBase" && grid[x][y+1]["content"] != "dormantDanBase" && grid[x][y+1]["content"] != "dan")){
-					grid[x][y+1]["content"] = "empty";
-					document.getElementById("x"+(x)+"y"+(y+1)).src = grid[x][y+1]["content"]+".png";
+				try{
+					if(temp==1 && grid[x][y+1]["content"].substring(0,4) != "wall" && (grid[x][y+1]["content"] != "danBase" && grid[x][y+1]["content"] != "reallyDormantDanBase" && grid[x][y+1]["content"] != "dormantDanBase" && grid[x][y+1]["content"] != "dan")){
+						grid[x][y+1]["content"] = "empty";
+						document.getElementById("x"+(x)+"y"+(y+1)).src = grid[x][y+1]["content"]+".png";
+					}
+					
+					if(temp==2 && grid[x][y-1]["content"].substring(0,4) != "wall" && (grid[x][y-1]["content"] != "danBase" && grid[x][y-1]["content"] != "reallyDormantDanBase" && grid[x][y-1]["content"] != "dormantDanBase" && grid[x][y-1]["content"] != "dan")){
+						grid[x][y-1]["content"] = "empty";
+						document.getElementById("x"+(x)+"y"+(y-1)).src = grid[x][y-1]["content"]+".png";
+					}
+					
+					if(temp==3 && grid[x+1][y]["content"].substring(0,4) != "wall" && (grid[x+1][y]["content"] != "danBase" && grid[x+1][y]["content"] != "reallyDormantDanBase" && grid[x+1][y]["content"] != "dormantDanBase" && grid[x+1][y]["content"] != "dan")){
+						grid[x+1][y]["content"] = "empty";
+						document.getElementById("x"+(x+1)+"y"+(y)).src = grid[x+1][y]["content"]+".png";
+					}
+					
+					if(temp==4 && grid[x-1][y]["content"].substring(0,4) != "wall" && (grid[x-1][y]["content"] != "danBase" && grid[x-1][y]["content"] != "reallyDormantDanBase" && grid[x-1][y]["content"] != "dormantDanBase" && grid[x-1][y]["content"] != "dan")){
+						grid[x-1][y]["content"] = "empty";
+						document.getElementById("x"+(x-1)+"y"+(y)).src = grid[x-1][y]["content"]+".png";
+					}
+				}catch(err){
+					console.log("ERROR: "+err);
 				}
-				
-				if(temp==2 && grid[x][y-1]["content"].substring(0,4) != "wall" && (grid[x][y-1]["content"] != "danBase" && grid[x][y-1]["content"] != "reallyDormantDanBase" && grid[x][y-1]["content"] != "dormantDanBase" && grid[x][y-1]["content"] != "dan")){
-					grid[x][y-1]["content"] = "empty";
-					document.getElementById("x"+(x)+"y"+(y-1)).src = grid[x][y-1]["content"]+".png";
-				}
-				
-				if(temp==3 && grid[x+1][y]["content"].substring(0,4) != "wall" && (grid[x+1][y]["content"] != "danBase" && grid[x+1][y]["content"] != "reallyDormantDanBase" && grid[x+1][y]["content"] != "dormantDanBase" && grid[x+1][y]["content"] != "dan")){
-					grid[x+1][y]["content"] = "empty";
-					document.getElementById("x"+(x+1)+"y"+(y)).src = grid[x+1][y]["content"]+".png";
-				}
-				
-				if(temp==4 && grid[x-1][y]["content"].substring(0,4) != "wall" && (grid[x-1][y]["content"] != "danBase" && grid[x-1][y]["content"] != "reallyDormantDanBase" && grid[x-1][y]["content"] != "dormantDanBase" && grid[x-1][y]["content"] != "dan")){
-					grid[x-1][y]["content"] = "empty";
-					document.getElementById("x"+(x-1)+"y"+(y)).src = grid[x-1][y]["content"]+".png";
-				}
-				
+					
 			}else{
 				
 				
@@ -889,40 +887,62 @@ button{
 							}
 						}else{
 							//i undefined
+							if(grid[j][i+1] != undefined){
+								N = "N";
+								if(grid[j+1][i]["content"].substring(0,4) == "wall"){
+									E = "E";
+								}
+								if(grid[j][i+1]["content"].substring(0,4) == "wall"){
+									S = "S";
+								}
+								if(grid[j-1][i]["content"].substring(0,4) == "wall"){
+									W = "W";
+								}
+							}else{
+								S = "S";
+								if(grid[j+1][i]["content"].substring(0,4) == "wall"){
+									E = "E";
+								}
+								if(grid[j][i-1]["content"].substring(0,4) == "wall"){
+									N = "N";
+								}
+								if(grid[j-1][i]["content"].substring(0,4) == "wall"){
+									W = "W";
+								}
+							}
 						}
 					}else{
 						//j undefined
+						if(grid[j][i+1] == undefined){
+							N = "N";
+						}else if(grid[j][i-1] == undefined){
+							S = "S";
+						}
+						
 						if(grid[j+1] != undefined){
 							W = "W";
-							if(grid[j][i+1] != undefined && grid[j][i-1] != undefined){
-								if(grid[j][i+1] != undefined){
-									N = "N";
-									if(grid[j][i+1]["content"].substring(0,4) == "wall"){
-										N = "N";
-									}
-								}else{
-									S = "S";
-									if(grid[j][i-1]["content"].substring(0,4) == "wall"){
-										S = "S";
-									}
-								}
-							}else{
-								if(grid[j][i+1] != undefined){
-									N = "N";
-									if(grid[j][i+1]["content"].substring(0,4) == "wall"){
-										N = "N";
-									}
-								}else{
-									S = "S";
-									if(grid[j][i-1]["content"].substring(0,4) == "wall"){
-										S = "S";
-									}
-								}
-								
+							if(grid[j][i-1]["content"].substring(0,4) == "wall"){
+								N = "N";
+							}
+							if(grid[j][i+1]["content"].substring(0,4) == "wall"){
+								S = "S";
+							}
+							if(grid[j+1][i]["content"].substring(0,4) == "wall"){
+								E = "E";
 							}
 						}else{
-							
+							E = "E";
+							if(grid[j][i-1]["content"].substring(0,4) == "wall"){
+								N = "N";
+							}
+							if(grid[j][i+1]["content"].substring(0,4) == "wall"){
+								S = "S";
+							}
+							if(grid[j-1][i]["content"].substring(0,4) == "wall"){
+								W = "W";
+							}
 						}
+						
 					}
 					
 					
@@ -943,6 +963,10 @@ button{
 				}
 			}
 	}		
+	
+	var size = 25;
+	var grid = makeGrid(25,30);
+	dispGrid(grid);
 	
 	var timer = setInterval(tick,250);
 	
