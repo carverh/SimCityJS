@@ -133,6 +133,7 @@ button{
 			<button onClick = "setSelection('tinyFactory')" >Industrial</button>$100, Simple Factories<br/>
 			<button onClick = "setSelection('tinyPark')" >Parks</button>$200, Quaint Parks<br/>
 			<button onClick = "setSelection('wall')" >Walls</button>$50, Reliable Defense<br/>
+			<button onClick = "setSelection('tower')" >Tower</button>$10,000, Destroys The Trash Man, needs <img src="tinyHouse.png" height="16px"/><br/>
 			<button onClick = "setSelection('upgrade')" >Upgrade</button>Epensive, But, Worth It<br/>
 			<button onClick = "setSelection('empty')" >Demolish</button>Clean Your City<br/>
 			
@@ -439,6 +440,15 @@ button{
 						
 					}
 					
+					if(currentSelection == "tower" && money>=10000){
+						grid[x][y]["content"] = currentSelection;
+						grid[x][y]["towerTime"] = 720;
+						money-=10000;
+						console.log(money);
+					}else if(currentSelection == "tower" && money <= 10000){
+						
+					}
+					
 					if(currentSelection == "tinyPark" && money>=200){
 						grid[x][y]["content"] = currentSelection;
 						money-=200;
@@ -606,6 +616,8 @@ button{
 		return grid;
 	}
 	danBasePlaced = false;
+	
+	
 	function tick(){
 		if(Math.floor((Math.random() * 20) + 1) == 10){
 			decay = true;
@@ -614,6 +626,24 @@ button{
 		}
 		for(var i = 0; i < size ; i ++) {
 			for(var j = 0; j < size ; j ++) {
+				
+				
+				if(grid[j][i]["content"] == "tower"){
+					grid[j][i]["towerTime"]--;
+					console.log(grid[j][i]["towerTime"]);
+					
+					console.log(grid[j][i]["towerTime"] <= 0);
+					if(grid[j][i]["towerTime"] <= 0 || nearby("population",6,j,i) <= 20){
+						grid[j][i]["content"] = "abandoned";
+					}else{
+						console.log("NOT ABANDONED")
+						destroyDan(3,j,i);
+					}
+				}
+				
+				if(grid[j][i]["content"] == "abandoned"){
+					document.getElementById("x"+j+"y"+i).src = grid[j][i]["content"]+".png";
+				}
 				
 				if(decay){
 					if(grid[j][i]["content"] == "dormantDanBase"){
@@ -643,21 +673,29 @@ button{
 										
 										if(temp==1 && grid[j][i+1]["content"].substring(0,4) != "wall" && (grid[j][i+1]["content"] != "danBase" && grid[j][i+1]["content"] != "reallyDormantDanBase" && grid[j][i+1]["content"] != "dormantDanBase" && grid[j][i+1]["content"] != "dan")){
 											grid[j][i+1]["content"] = "empty";
+											grid[j][i+1]["population"] = 0;
+											grid[j][i+1]["storeValue"] = 0;
 											document.getElementById("x"+(j)+"y"+(i+1)).src = grid[j][i+1]["content"]+".png";
 										}
 											
 										if(temp==2 && grid[j][i-1]["content"].substring(0,4) != "wall" && (grid[j][i-1]["content"] != "danBase" && grid[j][i-1]["content"] != "reallyDormantDanBase" && grid[j][i-1]["content"] != "dormantDanBase" && grid[j][i-1]["content"] != "dan")){
 											grid[j][i-1]["content"] = "empty";
+											grid[j][i-1]["population"] = 0;
+											grid[j][i-1]["storeValue"] = 0;
 											document.getElementById("x"+(j)+"y"+(i-1)).src = grid[j][i-1]["content"]+".png";
 										}
 												
 										if(temp==3 && grid[j+1][i]["content"].substring(0,4) != "wall" && (grid[j+1][i]["content"] != "danBase" && grid[j+1][i]["content"] != "reallyDormantDanBase" && grid[j+1][i]["content"] != "dormantDanBase" && grid[j+1][i]["content"] != "dan")){
 											grid[j+1][i]["content"] = "empty";
+											grid[j-1][i]["population"] = 0;
+											grid[j-1][i]["storeValue"] = 0;
 											document.getElementById("x"+(j+1)+"y"+(i)).src = grid[j+1][i]["content"]+".png";
 										}
 												
 										if(temp==4 && grid[j-1][i]["content"].substring(0,4) != "wall" && (grid[j-1][i]["content"] != "danBase" && grid[j-1][i]["content"] != "reallyDormantDanBase" && grid[j-1][i]["content"] != "dormantDanBase" && grid[j-1][i]["content"] != "dan")){
 											grid[j-1][i]["content"] = "empty";
+											grid[j+1][i]["population"] = 0;
+											grid[j+1][i]["storeValue"] = 0;
 											document.getElementById("x"+(j-1)+"y"+(i)).src = grid[j-1][i]["content"]+".png";
 										}
 									}
@@ -701,15 +739,23 @@ button{
 								temp = Math.floor((Math.random() * 10) + 1);
 								if(temp==1 && grid[j][i+1]["content"].substring(0,4) == "wall"){
 									grid[j][i+1]["content"] = "empty";
+									grid[j][i+1]["population"] = 0;
+									grid[j][i+1]["storeValue"] = 0;
 								}
 								if(temp==2 && grid[j][i-1]["content"].substring(0,4) == "wall"){
 									grid[j][i-1]["content"] = "empty";
+									grid[j][i-1]["population"] = 0;
+									grid[j][i-1]["storeValue"] = 0;
 								}
 								if(temp==3 && grid[j-1][i]["content"].substring(0,4) == "wall"){
 									grid[j-1][i]["content"] = "empty";
+									grid[j-1][i]["population"] = 0;
+									grid[j-1][i]["storeValue"] = 0;
 								}
 								if(temp==4 && grid[j+1][i]["content"].substring(0,4) == "wall"){
 									grid[j+1][i]["content"] = "empty";
+									grid[j+1][i]["population"] = 0;
+									grid[j+1][i]["storeValue"] = 0;
 								}
 								
 				
@@ -783,6 +829,13 @@ button{
 					money -= 2;
 				}
 				
+				if(grid[j][i]["content"] == "tower"){
+					if(nearby("population",6,j,i) <= 20 ){
+						grid[j][i]["content"] = "abandoned";
+					}
+					money -= 2;
+				}
+				
 				if(grid[j][i]["content"] == "medStore"){
 					if(nearby("population",6,j,i) <= 50 ){
 						grid[j][i]["content"] = "abandoned";
@@ -838,6 +891,21 @@ button{
 				if(grid[i+centerx] != undefined){
 					if(grid[i+centerx][j+centery] != undefined){
 						grid[i+centerx][j+centery][key] += potency;
+					}
+				}
+			}
+		}
+	}
+	
+	function destroyDan(radius,centerx,centery){
+		for(var i = radius*-1; i < radius; i++){
+			for(var j = radius*-1; j < radius; j++){
+				if(grid[i+centerx] != undefined){
+					if(grid[i+centerx][j+centery] != undefined){
+						if(grid[i+centerx][j+centery]["content"] == "danBase" || grid[i+centerx][j+centery]["content"] == "dormantDanBase"){
+							grid[i+centerx][j+centery]["content"] = "abandoned";
+							document.getElementById("x"+(i+centerx)+"y"+(j+centery)).src = grid[i+centerx][j+centery]["content"]+".png";
+						}
 					}
 				}
 			}
