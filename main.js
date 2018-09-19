@@ -748,7 +748,7 @@
 			for(var j = radius*-1; j < radius; j++){
 				if(grid[i+centerx] != undefined){
 					if(grid[i+centerx][j+centery] != undefined){
-						if(grid[i+centerx][j+centery]["content"] == "danBase" || grid[i+centerx][j+centery]["content"] == "dormantDanBase"){
+						if(grid[i+centerx][j+centery]["content"] == "dan" || grid[i+centerx][j+centery]["content"] == "danBase" || grid[i+centerx][j+centery]["content"] == "dormantDanBase"){
 							grid[i+centerx][j+centery]["content"] = "abandoned";
 							document.getElementById("x"+(i+centerx)+"y"+(j+centery)).src = grid[i+centerx][j+centery]["content"]+".png";
 						}
