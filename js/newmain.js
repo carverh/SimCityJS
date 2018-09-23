@@ -28,7 +28,6 @@ class Tile {
 
 function setSelection(newSel) {
     vars.selection = newSel;
-
 }
 
 function makeGrid(size) {
@@ -37,7 +36,7 @@ function makeGrid(size) {
     for (var x = 0; x < vars.gridSize; x++) {
         vars.grid[x] = {};
         for (var y = 0; y < vars.gridSize; y++) {
-            vars.grid[x][y] = new tile();
+            vars.grid[x][y] = new Tile();
             vars.grid[x][y].elevation = Math.round((Math.random() * 5) + 3);
         }
     }
