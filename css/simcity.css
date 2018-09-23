@@ -1,0 +1,99 @@
+#mainTitle{
+	text-align:center;
+}
+
+#memeTitle{
+	width:260px;
+	height:40px;
+	margin:auto;
+}
+
+#control{
+		float:left;
+}
+
+.shine{
+	background-color:#0095ff;
+	border-left:5px solid #55d5ff;
+	border-top:5px solid #55d5ff;
+	border-bottom:5px solid #0065cc;
+	border-right:5px solid #0065cc;
+}
+
+#memeSpan{
+	font-size:35px;
+	font-weight:bold;
+}
+
+main{
+	width:500px;
+	height:500px;
+	float:left;
+	margin-right:50px;
+	margin-bottom:50px;
+}
+
+#mainBackground{
+	float:left;
+}
+body{
+	background-color:#dddddd;
+}
+
+.medBorder{
+	border:3px solid black;
+}
+
+#about{
+	min-width:250px;
+	width:80%;
+	margin:auto;
+	margin-top:5px;
+	padding:5px;
+	text-align:center;
+}
+
+#left{
+	float:left;
+	height:410px;
+	width:45px;
+}
+
+#right{
+	float:left;
+	height:410px;
+	width:45px;
+}
+
+#up{
+	margin:auto;
+	width:410px;
+	margin-left:45px;
+	height:45px;
+}
+
+#down{
+	margin:auto;
+	width:410px;
+	height:45px;
+	margin-left:45px;
+}
+
+#grid {
+	height:500px;
+	width:500px;
+	float:left;
+	border:5px solid black;
+	margin:auto;
+}
+
+#control{
+	width:500px;
+	
+	min-height:400px;
+}
+
+button{
+	background-color:#0095ff;	
+	width:100px;
+}

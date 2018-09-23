@@ -5,115 +5,21 @@ var socket = io();
 </script>
 -->
 
-<style>
-#mainTitle{
-	text-align:center;
-}
-
-#memeTitle{
-	width:260px;
-	height:40px;
-	margin:auto;
-}
-
-#controlDiv{
-		float:left;
-}
-
-.shine{
-	background-color:#0095ff;
-	border-left:5px solid #55d5ff;
-	border-top:5px solid #55d5ff;
-	border-bottom:5px solid #0065cc;
-	border-right:5px solid #0065cc;
-}
-
-#memeSpan{
-	font-size:35px;
-	font-weight:bold;
-}
-
-#mainDiv{
-	width:500px;
-	height:500px;
-	float:left;
-	margin-right:50px;
-	margin-bottom:50px;
-}
-
-#mainBackground{
-	float:left;
-}
-#mainBody{
-	background-color:#dddddd;
-}
-
-.medBorder{
-	border:3px solid black;
-}
-
-#about{
-	min-width:250px;
-	width:80%;
-	margin:auto;
-	margin-top:5px;
-	padding:5px;
-	text-align:center;
-}
-
-#left{
-	float:left;
-	height:410px;
-	width:45px;
-}
-
-#right{
-	float:left;
-	height:410px;
-	width:45px;
-}
-
-#up{
-	margin:auto;
-	width:410px;
-	margin-left:45px;
-	height:45px;
-}
-
-#down{
-	margin:auto;
-	width:410px;
-	height:45px;
-	margin-left:45px;
-}
-
-#gridDiv{
-	height:500px;
-	width:500px;
-	float:left;
-	border:5px solid black;
-	margin:auto;
-}
-
-#controlDiv{
-	width:500px;
-	
-	min-height:400px;
-}
-
-button{
-	background-color:#0095ff;	
-	width:100px;
-}
-
-</style>
-<body id="mainBody">
-	<div id="mainDiv">
-		<div id="gridDiv"><canvas id="mainCanvas" width="500px" height="500px"></canvas></div>
-	</div>
-	
-	
-	<div class="shine" id="controlDiv">
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>SimCityJS</title>
+	<link rel="stylesheet" href="/css/simcity.css">
+</head>
+<body>
+	<main>
+		<div id="grid">
+			<canvas id="mainCanvas" width="500" height="500"></canvas>
+		</div>
+	</main>
+	<aside class="shine" id="control">
 		<div>makeGrid(size , smoothness)</div>
 		<button onClick="makeGridViaButton()">makeGrid</button><span>(</span>
 		<input type="text" id="gridSizeTextbox"/><span>,</span>
@@ -133,7 +39,7 @@ button{
 			<button onClick = "setSelection('tinyFactory')" >Industrial</button>$100, Simple Factories<br/>
 			<button onClick = "setSelection('tinyPark')" >Parks</button>$200, Quaint Parks<br/>
 			<button onClick = "setSelection('wall')" >Walls</button>$50, Reliable Defense<br/>
-			<button onClick = "setSelection('tower')" >Tower</button>$10,000, Destroys The Trash Man, needs <img src="tinyHouse.png" height="16px"/><br/>
+			<button onClick = "setSelection('tower')" >Tower</button>$10,000, Destroys The Trash Man, needs <img src="img/tinyHouse.png" height="16px"/><br/>
 			<button onClick = "setSelection('upgrade')" >Upgrade</button>Epensive, But, Worth It<br/>
 			<button onClick = "setSelection('empty')" >Demolish</button>Clean Your City<br/>
 			
@@ -143,10 +49,7 @@ button{
 		<div id="statDiv">
 		
 		</div>
-	</div>
+	</aside>
+	<script src="/js/newmain.js"></script>
 </body>
-
-
-<script src="newmain.js">
-
-</script>
+</html>
